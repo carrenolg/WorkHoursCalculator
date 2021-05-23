@@ -1,0 +1,20 @@
+from flask import Flask, jsonify
+from flask_restful import Api
+from database.db import initialize_db
+from resources.routes import initialize_routes
+from resources.errors import errors
+
+app = Flask(__name__)
+api = Api(app, errors=errors)
+
+app.config['MONGODB_SETTINGS'] = {
+    'host': 'mongodb://root:1q2w3e4r@localhost:27017/workhour-calculator?authSource=admin'
+}
+
+initialize_db(app)
+initialize_routes(api)
+
+# Custom errors doesn't work when debug=True is setting
+if __name__ == '__main__':
+    # app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=False)
