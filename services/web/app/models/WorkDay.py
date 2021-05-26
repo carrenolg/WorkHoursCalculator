@@ -57,7 +57,7 @@ class WorkDay:
             holidays.append(
                 date(year=item.year, month=item.month, day=item.day)
             )
-        return d in holidays
+        return d in holidays or d.weekday() == 6
 
     def __create_hours_of_day(self):
         ds = self.start_dt
