@@ -74,35 +74,43 @@ function Shift() {
     setInputFields(values);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const values = inputFields.map((i) => {
+    const inputs = inputFields.map((i) => {
       let workDay = {
         id: i.id,
         start: {
           year: i.startDateTime.getFullYear(),
           month: i.startDateTime.getMonth(),
           date: i.startDateTime.getDate(),
-          hour: i.startDateTime.getHours() // ignore minutes
+          hour: i.startDateTime.getHours(), // ignore minutes
         },
         end: {
           year: i.lastDateTime.getFullYear(),
           month: i.lastDateTime.getMonth(),
           date: i.lastDateTime.getDate(),
-          hour: i.lastDateTime.getHours() // ignore minutes
-        }
+          hour: i.lastDateTime.getHours(), // ignore minutes
+        },
       };
       return workDay;
     });
 
-    console.log(values);
-    const response = await axios.post(`http://localhost:8080/api/calculate`, values);
-    //const response = await axios.get(`http://localhost:8080/api/calculate`);
-    //const response = await axios.get(`http://localhost:8080/holidays`);
-    //const response = await axios.post(`http://localhost:8080/holidays`, values);
-    console.log(response);
-    console.log(response.data);
+    axios.post(`http://localhost:8080/api/calculate`, inputs).then((res) => {
+      let data = res.data;
+
+      const values = inputFields.map((element) => {
+        data.forEach((item) => {
+          if (element.id === item.id) {
+            element.ord = item.ord;
+            element.ext = item.ext;
+            element.total = item.total;
+          }
+        });
+        return element;
+      });
+      setInputFields(values);
+    });
   };
 
   const handleChangeInput = (date, obj) => {
@@ -157,7 +165,6 @@ function Shift() {
                     className={classes.textfield}
                     id="index"
                     label="HD"
-                    defaultValue="0"
                     variant="outlined"
                     size="small"
                     InputProps={{
@@ -171,7 +178,6 @@ function Shift() {
                     variant="outlined"
                     size="small"
                     label="HN"
-                    defaultValue="0"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -183,7 +189,6 @@ function Shift() {
                     variant="outlined"
                     size="small"
                     label="HDF"
-                    defaultValue="0"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -195,7 +200,6 @@ function Shift() {
                     variant="outlined"
                     size="small"
                     label="HNF"
-                    defaultValue="0"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -207,7 +211,6 @@ function Shift() {
                     variant="outlined"
                     size="small"
                     label="EXD"
-                    defaultValue="0"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -219,7 +222,6 @@ function Shift() {
                     variant="outlined"
                     size="small"
                     label="EXN"
-                    defaultValue="0"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -231,7 +233,6 @@ function Shift() {
                     variant="outlined"
                     size="small"
                     label="EDF"
-                    defaultValue="0"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -243,7 +244,6 @@ function Shift() {
                     variant="outlined"
                     size="small"
                     label="ENF"
-                    defaultValue="0"
                     InputProps={{
                       readOnly: true,
                     }}
@@ -255,7 +255,6 @@ function Shift() {
                     variant="outlined"
                     size="small"
                     label="Total"
-                    defaultValue="0"
                     InputProps={{
                       readOnly: true,
                     }}
