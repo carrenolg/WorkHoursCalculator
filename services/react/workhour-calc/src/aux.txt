@@ -1,0 +1,12 @@
+console.log(inputFields);
+const values = inputFields.map((element) => {
+    /*if ("1" === element.id) {
+    element.ord = [2, 2, 2, 2];
+    element.ext = [2, 2, 2, 2];
+    }*/
+    element.ord = [2, 2, 2, 2];
+    element.ext = [2, 2, 2, 2];
+    element.total = 16;
+    return element;
+});
+setInputFields(values);

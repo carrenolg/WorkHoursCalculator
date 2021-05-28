@@ -39,6 +39,24 @@ class WorkDay:
     @property
     def segmeted_hours(self):
         return self.__segmented_hours
+    
+    @property
+    def segmeted_hours_amount(self):
+        amount = {
+            "ord": [
+                len(self.__segmented_hours["ord"]["day"]),
+                len(self.__segmented_hours["ord"]["night"]),
+                len(self.__segmented_hours["ord"]["day-holyday"]),
+                len(self.__segmented_hours["ord"]["night-holyday"])
+            ],
+            "ext": [
+                len(self.__segmented_hours["ext"]["day"]),
+                len(self.__segmented_hours["ext"]["night"]),
+                len(self.__segmented_hours["ext"]["day-holyday"]),
+                len(self.__segmented_hours["ext"]["night-holyday"])
+            ]
+        }
+        return amount
 
     # @hours.setter
     # def hours(self, value):

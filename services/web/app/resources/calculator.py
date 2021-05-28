@@ -1,5 +1,4 @@
 from flask_restful import Resource, request
-from flask import Response
 from collections import namedtuple
 from models.WorkDay import WorkDay
 
@@ -8,21 +7,41 @@ DTINPUT = namedtuple('DTINPUT', ['year', 'month', 'day', 'hour', 'minute'])
 
 
 class CalculatorApi(Resource):
+    def get(self):
+        data = {"route": "/api/calculate"}
+        return data, 200
+
     def post(self):
-        body = request.get_json()
-        hours = {**body}
-        start_dt = DTINPUT(2021, 12, 24, 16, 0)
-        end_dt = DTINPUT(2021, 12, 25, 16, 0)
-        wd = WorkDay(2021, 1, 5, start_dt, end_dt)
-        d = wd.segmeted_hours
-        # ord
-        print("d['ord']['day']:", len(d["ord"]["day"]))
-        print("d['ord']['night']:", len(d["ord"]["night"]))
-        print("d['ord']['day-holyday']:", len(d["ord"]["day-holyday"]))
-        print("d['ord']['day-holyday']:", len(d["ord"]["night-holyday"]))
-        # extra
-        print("d['ext']['day']:", len(d["ext"]["day"]))
-        print("d['ext']['night']:", len(d["ext"]["night"]))
-        print("d['ext']['day-holyday']:", len(d["ext"]["day-holyday"]))
-        print("d['ext']['day-holyday']:", len(d["ext"]["night-holyday"]))
-        return Response(hours, mimetype="application/json", status=200)
+        # data: [{id, start, end, total}]
+        data = request.get_json()
+        result = []
+        for item in data:
+            start_dt = DTINPUT(
+                year=item['start']['year'],
+                month=item['start']['month'],
+                day=item['start']['date'],
+                hour=item['start']['hour'],
+                minute=0
+            )
+            end_dt = DTINPUT(
+                year=item['end']['year'],
+                month=item['end']['month'],
+                day=item['end']['date'],
+                hour=item['end']['hour'],
+                minute=0
+            )
+            wd = WorkDay(
+                item['start']['year'],
+                item['start']['month'],
+                item['start']['date'],
+                start_dt,
+                end_dt
+            )
+            result.append({
+                "id": item["id"],
+                "ord": wd.segmeted_hours_amount["ord"],
+                "ext": wd.segmeted_hours_amount["ext"],
+                "total": wd.total_hours
+            })
+        # return Response(result, mimetype="application/json", status=200)
+        return result, 200
