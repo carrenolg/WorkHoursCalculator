@@ -10,10 +10,10 @@ function Navigation() {
             <NavLink to="/">NFC</NavLink>
           </li>
           <li>
-            <NavLink to="/about">Festivos</NavLink>
+            <NavLink to="/holidays">Holidays</NavLink>
           </li>
           <li>
-            <NavLink to="/contact">Contacto</NavLink>
+            <NavLink to="/contact">Contact</NavLink>
           </li>
         </ul>
       </nav>
