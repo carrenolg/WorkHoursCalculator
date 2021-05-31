@@ -20,6 +20,7 @@ class HolidayList(Resource):
 class HolidayApi(Resource):
     def delete(self, id):
         try:
+            # id: comming as parameter url
             holiday = Holiday.objects.get(id=id)
             holiday.delete()
             return 'Deleted', 200

@@ -82,19 +82,21 @@ function Shift() {
         id: i.id,
         start: {
           year: i.startDateTime.getFullYear(),
-          month: i.startDateTime.getMonth(),
+          month: i.startDateTime.getMonth() + 1, // add 1 by python compativility
           date: i.startDateTime.getDate(),
           hour: i.startDateTime.getHours(), // ignore minutes
         },
         end: {
           year: i.lastDateTime.getFullYear(),
-          month: i.lastDateTime.getMonth(),
+          month: i.lastDateTime.getMonth() + 1, // add 1 by python compativility,
           date: i.lastDateTime.getDate(),
           hour: i.lastDateTime.getHours(), // ignore minutes
         },
       };
       return workDay;
     });
+
+    console.log(inputs);
 
     axios.post(`http://localhost:8080/api/calculate`, inputs).then((res) => {
       let data = res.data;
@@ -129,7 +131,7 @@ function Shift() {
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <form className={classes.root} onSubmit={handleSubmit}>
+            <form className={classes.root}>
               {inputFields.map((inputField) => (
                 <div key={inputField.id} className={classes.shift}>
                   <IcoButton

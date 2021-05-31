@@ -31,11 +31,11 @@ class CalculatorApi(Resource):
                 minute=0
             )
             wd = WorkDay(
-                item['start']['year'],
-                item['start']['month'],
-                item['start']['date'],
-                start_dt,
-                end_dt
+                year=item['start']['year'],
+                month=item['start']['month'],
+                day=item['start']['date'],
+                start_dt=start_dt,
+                end_dt=end_dt
             )
             result.append({
                 "id": item["id"],
