@@ -58,6 +58,7 @@ function Holiday() {
       return i;
     });
     setInputHolidays(data);
+    setInputHolidays(holidays);
   };
 
   const handleSubmit = async (e) => {
@@ -75,8 +76,11 @@ function Holiday() {
       holiday
     );
     const holidays = await response.data;
-    // updateInputHolidaysChange(holidays);
-    getAllHolidays();
+    // console.log(holidays);
+    if (holidays !== undefined) {
+      setInputDes("");
+      getAllHolidays();
+    }
   };
 
   const handleInputDes = (e) => {
