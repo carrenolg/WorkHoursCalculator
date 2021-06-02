@@ -92,7 +92,9 @@ function Holiday() {
       `http://localhost:8080/holidays/${holiday.id}`
     );
     const result = await response.data;
-    getAllHolidays();
+    if (result !== undefined) {
+      getAllHolidays();
+    }
   };
 
   // dialog
