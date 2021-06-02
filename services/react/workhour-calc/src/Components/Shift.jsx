@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   report: {
-    "& div": {},
+    color: theme.palette.text.secondary,
   },
 }));
 
@@ -60,6 +60,21 @@ function Shift() {
       total: 0,
     },
   ]);
+
+  // report
+  const [expanded, setExpanded] = useState(false);
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  const [totalHrs, setTotalHrs] = useState(0);
+
+  const [totalOrdHrs, setTotalOrdHrs] = useState(0);
+
+  const [totalExtHrs, setTotalExtHrs] = useState(0);
+
+  const [totalDay, setTotalDay] = useState(0);
 
   const handleAddFields = () => {
     setInputFields([
@@ -106,8 +121,6 @@ function Shift() {
       return workDay;
     });
 
-    console.log(inputs);
-
     axios.post(`http://localhost:8080/api/calculate`, inputs).then((res) => {
       let data = res.data;
 
@@ -122,11 +135,33 @@ function Shift() {
         return element;
       });
       setInputFields(values);
+      // update
+      updateReport(values);
     });
   };
 
+  const updateReport = (values) => {
+    // update report
+    let totalHrs = 0,
+      totalOrdHrs = 0,
+      totalExtHrs = 0,
+      totalDay = 0;
+    // redurce: func to adding each element of array
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    values.forEach((element) => {
+      totalHrs += parseInt(element.total);
+      totalOrdHrs += parseInt(element.ord.reduce(reducer));
+      totalExtHrs += parseInt(element.ext.reduce(reducer));
+      totalDay++;
+    });
+
+    setTotalHrs(totalHrs);
+    setTotalOrdHrs(totalOrdHrs);
+    setTotalExtHrs(totalExtHrs);
+    setTotalDay(totalDay);
+  };
+
   const handleChangeInput = (date, obj) => {
-    //console.log(date);
     const values = inputFields.map((element) => {
       if (obj.id === element.id) {
         element[obj.name] = date;
@@ -288,156 +323,71 @@ function Shift() {
         </Grid>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Accordion>
+            <Accordion
+              expanded={expanded === "panel1"}
+              onChange={handleChange("panel1")}
+            >
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
               >
-                <Typography className={classes.heading}>Report</Typography>
+                <Typography className={classes.heading}>Total Hrs.</Typography>
+                <Typography className={classes.secondaryHeading}></Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <div style={{ flex: 1 }}>
-                  <p>Total Hrs.</p>
-                  <TextField
-                    className={classes.textfield}
-                    id="total-hours"
-                    variant="outlined"
-                    size="small"
-                    label=""
-                    InputProps={{
-                      readOnly: true,
-                    }}
-                    value={0}
-                  />
-                </div>
-                <Typography style={{ flex: 1 }}>
-                  <div className="report">
-                    <div>
-                      <p>Ordinary</p>
-                    </div>
-                    <div>
-                      <p>Daytime Hrs.</p>
-                      <TextField
-                        className={classes.textfield}
-                        id="daytime-hours"
-                        variant="outlined"
-                        size="small"
-                        label=""
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        value={0}
-                      />
-                    </div>
-                    <div>
-                      <p>Nocturnal Hrs.</p>
-                      <TextField
-                        className={classes.textfield}
-                        id="daytime-hours"
-                        variant="outlined"
-                        size="small"
-                        label=""
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        value={0}
-                      />
-                    </div>
-                    <div>
-                      <p>Holiday Daytime Hrs.</p>
-                      <TextField
-                        className={classes.textfield}
-                        id="daytime-hours"
-                        variant="outlined"
-                        size="small"
-                        label=""
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        value={0}
-                      />
-                    </div>
-                    <div>
-                      <p>Holiday Nocturnal Hrs.</p>
-                      <TextField
-                        className={classes.textfield}
-                        id="daytime-hours"
-                        variant="outlined"
-                        size="small"
-                        label=""
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        value={0}
-                      />
-                    </div>
-                  </div>
+                <Typography>{`${totalHrs}`}</Typography>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel2"}
+              onChange={handleChange("panel2")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2bh-content"
+                id="panel2bh-header"
+              >
+                <Typography className={classes.heading}>
+                  Total Ordinary Hrs.
                 </Typography>
-                <Typography style={{ flex: 1 }}>
-                  <div className="report">
-                    <div>
-                      <p>Extra</p>
-                    </div>
-                    <div>
-                      <p>Daytime Hrs.</p>
-                      <TextField
-                        className={classes.textfield}
-                        id="daytime-hours"
-                        variant="outlined"
-                        size="small"
-                        label=""
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        value={0}
-                      />
-                    </div>
-
-                    <div>
-                      <p>Nocturnal Hrs.</p>
-                      <TextField
-                        className={classes.textfield}
-                        id="daytime-hours"
-                        variant="outlined"
-                        size="small"
-                        label=""
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        value={0}
-                      />
-                    </div>
-                    <div>
-                      <p>Holiday Daytime Hrs.</p>
-                      <TextField
-                        className={classes.textfield}
-                        id="daytime-hours"
-                        variant="outlined"
-                        size="small"
-                        label=""
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        value={0}
-                      />
-                    </div>
-                    <div>
-                      <p>Holiday Nocturnal Hrs.</p>
-                      <TextField
-                        className={classes.textfield}
-                        id="daytime-hours"
-                        variant="outlined"
-                        size="small"
-                        label=""
-                        InputProps={{
-                          readOnly: true,
-                        }}
-                        value={0}
-                      />
-                    </div>
-                  </div>
+                <Typography className={classes.secondaryHeading}></Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>{totalOrdHrs}</Typography>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel3"}
+              onChange={handleChange("panel3")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel3bh-content"
+                id="panel3bh-header"
+              >
+                <Typography className={classes.heading}>
+                  Total Extra hrs.
                 </Typography>
+                <Typography className={classes.secondaryHeading}></Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>{totalExtHrs}</Typography>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expanded === "panel4"}
+              onChange={handleChange("panel4")}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel4bh-content"
+                id="panel4bh-header"
+              >
+                <Typography className={classes.heading}>Total Days</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Typography>{totalDay}</Typography>
               </AccordionDetails>
             </Accordion>
           </Paper>

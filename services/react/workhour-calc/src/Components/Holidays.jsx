@@ -76,7 +76,6 @@ function Holiday() {
       holiday
     );
     const holidays = await response.data;
-    // console.log(holidays);
     if (holidays !== undefined) {
       setInputDes("");
       getAllHolidays();
@@ -88,13 +87,11 @@ function Holiday() {
   };
 
   const handleDelete = async (e, holiday) => {
-    // console.log(e, holiday);
     setOpen(false);
     const response = await axios.delete(
       `http://localhost:8080/holidays/${holiday.id}`
     );
     const result = await response.data;
-    console.log(result);
     getAllHolidays();
   };
 
