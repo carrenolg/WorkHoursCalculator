@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo
+    restart: always
+    env_file:
+      - ./service/db/.env.mongo
+    expose:
+      - 27017 # only containers
+    #ports:
+    #  - 27017:27017 # expose outside (on host)
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    env_file:
+      - ./service/db/.env.mongo
+
+  web:
+    build: ./services/web/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
