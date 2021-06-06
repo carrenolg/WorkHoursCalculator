@@ -62,8 +62,6 @@ function Shift() {
   ]);
 
   // report
-  const [expanded, setExpanded] = useState(false);
-
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -76,6 +74,9 @@ function Shift() {
 
   const [totalDay, setTotalDay] = useState(0);
 
+  const [expanded, setExpanded] = useState(false);
+
+  // (+) y (-) buttons
   const handleAddFields = () => {
     setInputFields([
       ...inputFields,
@@ -99,6 +100,7 @@ function Shift() {
     setInputFields(values);
   };
 
+  // send button
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -140,6 +142,17 @@ function Shift() {
     });
   };
 
+  // change someone datepicker
+  const handleChangeInput = (date, obj) => {
+    const values = inputFields.map((element) => {
+      if (obj.id === element.id) {
+        element[obj.name] = date;
+      }
+      return element;
+    });
+    setInputFields(values);
+  };
+
   const updateReport = (values) => {
     // update report
     let totalHrs = 0,
@@ -159,16 +172,6 @@ function Shift() {
     setTotalOrdHrs(totalOrdHrs);
     setTotalExtHrs(totalExtHrs);
     setTotalDay(totalDay);
-  };
-
-  const handleChangeInput = (date, obj) => {
-    const values = inputFields.map((element) => {
-      if (obj.id === element.id) {
-        element[obj.name] = date;
-      }
-      return element;
-    });
-    setInputFields(values);
   };
 
   return (
@@ -210,7 +213,7 @@ function Shift() {
                   </MuiPickersUtilsProvider>
                   <TextField
                     className={classes.textfield}
-                    id="index"
+                    id="outlined-basic"
                     label="HD"
                     variant="outlined"
                     size="small"
@@ -336,7 +339,7 @@ function Shift() {
                 <Typography className={classes.secondaryHeading}></Typography>
               </AccordionSummary>
               <AccordionDetails>
-                <Typography>{`${totalHrs}`}</Typography>
+                <Typography>{totalHrs}</Typography>
               </AccordionDetails>
             </Accordion>
             <Accordion

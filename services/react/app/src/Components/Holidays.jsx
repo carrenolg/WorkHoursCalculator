@@ -44,7 +44,7 @@ function Holiday() {
   const [inputDate, setInputDate] = useState(new Date());
   const [inputDes, setInputDes] = useState("");
   const [inputHolidays, setInputHolidays] = useState([]);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false); // dialog
 
   useEffect(() => {
     getAllHolidays();
@@ -58,7 +58,6 @@ function Holiday() {
       return i;
     });
     setInputHolidays(data);
-    setInputHolidays(holidays);
   };
 
   const handleSubmit = async (e) => {
