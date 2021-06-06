@@ -11,8 +11,6 @@ services:
     command: "mongod --auth"
     expose:
       - 27017 # only containers
-    #ports:
-    #  - 27017:27017 # expose outside (on host)
 
   mongo-express:
     image: mongo-express
@@ -26,8 +24,6 @@ services:
     build: ./services/web/app
     expose:
       - 8080 # only containers
-    #ports:
-    #  - 8080:8080
     depends_on:
       - mongo
 
