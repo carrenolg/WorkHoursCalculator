@@ -24,7 +24,7 @@ CORS(app, resources={
 '''
 
 app.config['MONGODB_SETTINGS'] = {
-    'host': 'mongodb://root:1q2w3e4r@mongo:27017/workhour-calculator?authSource=admin'
+    'host': 'mongodb://root:1q2w3e4r@mongo:27017/whdb?authSource=admin'
 }
 
 initialize_db(app)

@@ -51,7 +51,7 @@ function Holiday() {
   }, []);
 
   const getAllHolidays = async () => {
-    const response = await axios.get(`http://localhost:8080/holidays`);
+    const response = await axios.get(`/api/holidays`);
     const holidays = await response.data;
     const data = holidays.map((i) => {
       i.month = i.month - 1; // minus 1 python compativility
@@ -72,7 +72,7 @@ function Holiday() {
     };
 
     const response = await axios.post(
-      `http://localhost:8080/holidays`,
+      `/api/holidays`,
       holiday
     );
     const holidays = await response.data;
@@ -89,7 +89,7 @@ function Holiday() {
   const handleDelete = async (e, holiday) => {
     setOpen(false);
     const response = await axios.delete(
-      `http://localhost:8080/holidays/${holiday.id}`
+      `/api/holidays/${holiday.id}`
     );
     const result = await response.data;
     if (result !== undefined) {

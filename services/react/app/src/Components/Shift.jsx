@@ -121,7 +121,7 @@ function Shift() {
       return workDay;
     });
 
-    axios.post(`http://localhost:8080/api/calculate`, inputs).then((res) => {
+    axios.post(`/api/calculate`, inputs).then((res) => {
       let data = res.data;
 
       const values = inputFields.map((element) => {

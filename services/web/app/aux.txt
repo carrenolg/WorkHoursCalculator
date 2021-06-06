@@ -1,0 +1,2 @@
+
+client=mongodbshell.MongoDB('calculator', 'calculator', 'mongodb://root:1q2w3e4r@mongo:27017/?authSource=admin')

@@ -1,11 +1,14 @@
-version: "3.8"
+version: "3.2"
 
 services:
   mongo:
     image: mongo
+    container_name: "mongodb"
     restart: always
-    env_file:
-      - ./service/db/.env.mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=1q2w3e4r
+    command: "mongod --auth"
     expose:
       - 27017 # only containers
     #ports:
@@ -17,11 +20,20 @@ services:
     ports:
       - 8081:8081
     env_file:
-      - ./service/db/.env.mongo
+      - ./services/db/.env.mongo
 
-  web:
+  api:
     build: ./services/web/app
-    ports:
-      - 8080:8080
+    expose:
+      - 8080 # only containers
+    #ports:
+    #  - 8080:8080
     depends_on:
       - mongo
+
+  react:
+    build: ./services/react
+    depends_on:
+      - mongo
+    ports:
+      - 80:80
