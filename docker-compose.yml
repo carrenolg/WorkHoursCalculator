@@ -1,14 +1,13 @@
-version: "3.2"
+version: "3.7"
 
 services:
   mongo:
     image: mongo
     container_name: "mongodb"
     restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=1q2w3e4r
-    command: "mongod --auth"
+    env_file: ./services/db/.env
+    volumes:
+      - mongov:/data/db
     expose:
       - 27017 # only containers
 
@@ -17,19 +16,25 @@ services:
     restart: always
     ports:
       - 8081:8081
-    env_file:
-      - ./services/db/.env.mongo
+    env_file: ./services/db/express.env
+    depends_on:
+      - mongo
 
   api:
     build: ./services/web/app
     expose:
       - 8080 # only containers
+    env_file: ./services/web/app/.env
     depends_on:
       - mongo
 
   react:
     build: ./services/react
     depends_on:
-      - mongo
+      - api
     ports:
       - 80:80
+
+volumes:
+  mongov:
+    name: mongov
